@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1040" viewBox="0 0 1600 1040" role="img" aria-labelledby="title description">
+  <title id="title">Straight-line control &amp; turn tuning</title>
+  <desc id="description">Conceptual implementation paths. Wheel encoder speed mismatch passes through an IIR filter with alpha 0.30 and a PI controller with Kp 2.5 and Ki 10 to left and right PWM. Gyro Z passes through bias calibration, an IIR filter with alpha 0.10 and a rate deadband before yaw integration. Heading PID uses yaw relative to the initial heading and filtered gyro rate for its derivative term, then commands the steering servo. Nominal control period is 20 milliseconds. A separate manual turn sweep selects a servo pulse, runs a trial, measures angle, chord and radius, then compares and retunes.</desc>
+  <defs>
+    <marker id="arrow-blue" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M1 1 L7 4 L1 7" fill="none" stroke="#72ADC7" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="arrow-green" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M1 1 L7 4 L1 7" fill="none" stroke="#7EB297" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="arrow-gray" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M1 1 L7 4 L1 7" fill="none" stroke="#A0ADB7" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <style>
+      text {font-family:Inter,Arial,Helvetica,sans-serif;fill:#33434F}
+      .heading {font-size:22px;font-weight:600}
+      .body {font-size:17px;fill:#657784}
+      .small {font-size:15px;fill:#748590}
+      .section {font-size:14px;font-weight:600;letter-spacing:1.4px;fill:#627581}
+      .box {fill:#FFFFFF;stroke:#DCE5EA;stroke-width:1.15}
+      .blue {fill:none;stroke:#72ADC7;stroke-width:1.45;marker-end:url(#arrow-blue)}
+      .green {fill:none;stroke:#7EB297;stroke-width:1.45;marker-end:url(#arrow-green)}
+      .gray {fill:none;stroke:#A0ADB7;stroke-width:1.25;marker-end:url(#arrow-gray)}
+    </style>
+  </defs>
+  <rect width="1600" height="1040" fill="#FFFFFF"/>
+
+  <text x="72" y="75" font-size="38" font-weight="600" fill="#293A46">Straight-line control &amp; turn tuning</text>
+  <text x="72" y="112" class="body">Conceptual implementation paths</text>
+  <text x="1528" y="112" text-anchor="end" class="small">Nominal control period: 20 ms</text>
+  <line x1="72" y1="144" x2="1528" y2="144" stroke="#E6ECEF" stroke-width="1"/>
+
+  <line x1="72" y1="181" x2="94" y2="181" stroke="#72ADC7" stroke-width="1.6"/>
+  <text x="108" y="186" class="section">01  WHEEL-SPEED CORRECTION</text>
+
+  <rect x="72" y="214" width="332" height="132" rx="6" class="box"/>
+  <text x="96" y="253" class="heading">Encoder speed mismatch</text>
+  <text x="96" y="283" class="body">Left / right wheel feedback</text>
+  <text x="96" y="315" class="small">Input: relative wheel-speed error</text>
+
+  <path d="M404 280 H445" class="blue"/>
+  <rect x="446" y="214" width="332" height="132" rx="6" class="box"/>
+  <text x="470" y="253" class="heading">IIR filter</text>
+  <text x="470" y="283" class="body">α = 0.30</text>
+  <text x="470" y="315" class="small">Smooth the speed mismatch</text>
+
+  <path d="M778 280 H819" class="blue"/>
+  <rect x="820" y="214" width="332" height="132" rx="6" class="box"/>
+  <text x="844" y="253" class="heading">Wheel-speed PI</text>
+  <text x="844" y="283" class="body">Kp = 2.5     Ki = 10</text>
+  <text x="844" y="315" class="small">Proportional + integral correction</text>
+
+  <path d="M1152 280 H1193" class="blue"/>
+  <rect x="1194" y="214" width="332" height="132" rx="6" class="box"/>
+  <text x="1218" y="253" class="heading">Left / right motor PWM</text>
+  <text x="1218" y="283" class="body">Wheel-drive commands</text>
+  <text x="1218" y="315" class="small">Apply the speed-balance correction</text>
+
+  <line x1="72" y1="395" x2="1528" y2="395" stroke="#EEF2F4" stroke-width="1"/>
+  <line x1="72" y1="429" x2="94" y2="429" stroke="#7EB297" stroke-width="1.6"/>
+  <text x="108" y="434" class="section">02  HEADING CORRECTION</text>
+
+  <text x="1014.5" y="440" text-anchor="middle" class="small">Reference: initial heading</text>
+  <path d="M1014.5 449 V467" class="gray"/>
+
+  <rect x="72" y="468" width="185" height="156" rx="6" class="box"/>
+  <text x="94" y="509" class="heading">Gyro-Z</text>
+  <text x="94" y="541" class="body">Angular-rate</text>
+  <text x="94" y="566" class="body">feedback</text>
+
+  <path d="M257 546 H296" class="green"/>
+  <rect x="297" y="468" width="295" height="156" rx="6" class="box"/>
+  <text x="319" y="505" class="heading">Rate conditioning</text>
+  <text x="319" y="536" class="body">Bias calibration</text>
+  <text x="319" y="565" class="body">IIR α = 0.10</text>
+  <text x="319" y="594" class="body">Rate deadband</text>
+
+  <path d="M592 546 H631" class="green"/>
+  <rect x="632" y="468" width="195" height="156" rx="6" class="box"/>
+  <text x="654" y="509" class="heading">Integrate yaw</text>
+  <text x="654" y="541" class="body">Accumulate</text>
+  <text x="654" y="566" class="body">conditioned rate</text>
+
+  <path d="M827 546 H866" class="green"/>
+  <rect x="867" y="468" width="295" height="156" rx="6" class="box"/>
+  <text x="889" y="505" class="heading">Heading PID</text>
+  <text x="889" y="538" class="body">Kp = 9     Ki = 0.6     Kd = 2</text>
+  <text x="889" y="569" class="small">Yaw relative to initial heading</text>
+  <text x="889" y="594" class="small">Steering correction</text>
+
+  <path d="M1162 546 H1201" class="green"/>
+  <rect x="1202" y="468" width="326" height="156" rx="6" class="box"/>
+  <text x="1226" y="509" class="heading">Servo pulse</text>
+  <text x="1226" y="541" class="body">Steering command</text>
+  <text x="1226" y="581" class="small">Heading-based pulse adjustment</text>
+
+  <path d="M444.5 624 V674 H1014.5 V625" class="green"/>
+  <circle cx="444.5" cy="624" r="2.5" fill="#7EB297"/>
+  <rect x="537" y="660" width="392" height="29" fill="#FFFFFF"/>
+  <text x="733" y="680" text-anchor="middle" class="small">Derivative input: filtered gyro rate</text>
+
+  <line x1="72" y1="733" x2="1528" y2="733" stroke="#EEF2F4" stroke-width="1"/>
+  <line x1="72" y1="766" x2="94" y2="766" stroke="#72ADC7" stroke-width="1.6"/>
+  <text x="108" y="771" class="section">03  MANUAL TURN SWEEP</text>
+  <text x="1528" y="771" text-anchor="end" class="small">Manual trial sequence · steering parameter sweep</text>
+
+  <rect x="72" y="799" width="332" height="124" rx="6" class="box"/>
+  <text x="96" y="841" class="heading">Choose servo pulse</text>
+  <text x="96" y="876" class="body">Set one steering command</text>
+
+  <path d="M404 861 H445" class="gray"/>
+  <rect x="446" y="799" width="332" height="124" rx="6" class="box"/>
+  <text x="470" y="841" class="heading">Run a turn trial</text>
+  <text x="470" y="876" class="body">Observe the physical turn</text>
+
+  <path d="M778 861 H819" class="gray"/>
+  <rect x="820" y="799" width="332" height="124" rx="6" class="box"/>
+  <text x="844" y="841" class="heading">Measure the turn</text>
+  <text x="844" y="876" class="body">Angle / chord / radius</text>
+
+  <path d="M1152 861 H1193" class="gray"/>
+  <rect x="1194" y="799" width="332" height="124" rx="6" class="box"/>
+  <text x="1218" y="841" class="heading">Compare &amp; retune</text>
+  <text x="1218" y="876" class="body">Review before the next trial</text>
+
+  <path d="M1360 923 V955 H238 V924" fill="none" stroke="#C4D9E2" stroke-width="1.1" stroke-dasharray="4 5" marker-end="url(#arrow-gray)"/>
+  <rect x="661" y="940" width="278" height="27" fill="#FFFFFF"/>
+  <text x="800" y="960" text-anchor="middle" class="small">Repeat manually as needed</text>
+
+  <line x1="72" y1="990" x2="1528" y2="990" stroke="#E6ECEF" stroke-width="1"/>
+  <text x="72" y="1017" class="small">Signal paths and tuning workflow for the selected firmware.</text>
+</svg>
