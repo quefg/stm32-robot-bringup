@@ -25,4 +25,4 @@ Some retained test text still describes the earlier IR conversion range. The act
 
 ## Provenance
 
-The user's confirmed contributions are MCU configuration, sensor calibration, resistor/wire soldering and servo/PWM tuning within a team robot project. Inclusion here does not imply sole authorship of every function. Generated STM32 files retain STMicroelectronics notices; supporting vendor and RTOS components have separate notices. See [`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md) and [`licenses/`](licenses/).
+The user's confirmed contributions are MCU configuration, sensor calibration, resistor/wire soldering and servo/PWM tuning within a team robot project. Inclusion here does not imply sole authorship of every function. Generated STM32 files retain STMicroelectronics notices; supporting vendor and RTOS components have separate notices. See [`licenses/`](licenses/).
