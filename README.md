@@ -1,12 +1,12 @@
 # STM32 Robot Bring-up & Sensor Calibration
 
-**From board pinout to a working mobile robot.** Hands-on STM32CubeIDE configuration, sensor calibration, soldering, and steering/motor experiments on an STM32F407VET6 platform.
+**From board pinout to a working mobile robot.** Hands-on STM32CubeIDE configuration, closed-loop motion tuning, sensor calibration, soldering, and hardware integration on an STM32F407VET6 platform.
 
 ![Annotated STM32 robot and hardware integration](assets/stm32-annotated.png)
 
-**Embedded C · STM32 HAL · GPIO / NVIC · Timers / PWM · ADC · UART · I²C**
+**Embedded C · STM32 HAL · PI / PID · Sensor filtering · Timers / PWM · ADC · UART · I²C**
 
-This portfolio documents my work on the STM32 subsystem of an eight-person NTU Multidisciplinary Project. The platform combines two drive motors, steering servos, wheel encoders, infrared distance sensors, an HC-SR04 ultrasonic sensor, an IMU, and an OLED. My focus was the practical work connecting peripheral configuration, physical assembly, and bench observations.
+This portfolio documents my work on the STM32 subsystem of an eight-person NTU Multidisciplinary Project. The platform combines two drive motors, steering servos, wheel encoders, infrared distance sensors, an HC-SR04 ultrasonic sensor, an IMU, and an OLED. My work connected peripheral configuration and physical assembly with sensor measurements, straight-line control, and turning experiments.
 
 ## What I worked on
 
@@ -16,8 +16,26 @@ This portfolio documents my work on the STM32 subsystem of an eight-person NTU M
 | Calibrated IR and ultrasonic sensing and inspected sensor readings | [Calibration data and reproducible analysis](analysis/README.md) · [IR implementation](firmware/Core/Src/sensors/ir_sensor.c) · [Ultrasonic test](firmware/Core/Src/tests/component/test_ultrasonic.c) |
 | Soldered the ultrasonic interface resistors and IR sensor wires | [Assembly and debugging record](docs/bringup-and-debugging.md) |
 | Recorded and tuned servo pulse widths and motor PWM parameters | [Servo and PWM experiments](docs/servo-and-pwm.md) · [Shared tuning constants](firmware/Core/Inc/drivers/robot_tuning.h) |
+| Tuned wheel-speed PI, gyro-heading PID, and encoder/gyro filtering for straight-line motion | [Motion-control tuning](docs/motion-control-tuning.md) · [Straight controller](firmware/Core/Src/control/straight_control.c) |
+| Performed steering PWM sweeps and turn-calibration trials | [Turning experiments](docs/motion-control-tuning.md) · [Turn controller](firmware/Core/Src/control/turn_control.c) |
 
-The wider firmware includes encoder and IMU feedback and motion-command integration. Those modules provide project context; this showcase identifies my contributions in configuration, calibration, assembly, and tuning.
+My contribution spans configuration, assembly, calibration, and motion-control tuning within the team robot project. The selected source files make the hardware interfaces and experiment routines inspectable.
+
+## Motion-control tuning
+
+![Conceptual straight-line control paths and turning experiment workflow](assets/motion-control-tuning.svg)
+
+### Straight-line PI/PID and filtering
+
+I tuned two feedback paths: **wheel-speed PI** balances left/right motor PWM from encoder movement, while **gyro-based heading PID** adjusts the steering servo relative to the initial heading. Debugging separated wheel mismatch, steering-centre alignment, and gyro drift; matching wheel travel alone did not guarantee a straight chassis path.
+
+The selected implementation uses a nominal **20 ms control period**, IIR filtering on encoder mismatch and gyro readings, stationary gyro-bias calibration, deadbands, and integral/output limits. I adjusted the control gains and filtering while checking drift, steering response, and wheel behaviour. Filter coefficients and PI/PID gains are documented separately in the [tuning record](docs/motion-control-tuning.md).
+
+### Turning parameter sweeps
+
+I stepped through steering PWM settings, recorded the servo's useful response range, and ran turning trials while adjusting motor PWM, steering/radius settings, and stopping behaviour. The selected routines include a **180° minimum-radius trial** and **90° forward/back-out cases**, with UART output and instructions for measuring physical chassis angle and endpoint chord length.
+
+The [experiment notes](docs/motion-control-tuning.md) connect these manual sweeps to the source and distinguish recorded observations from configured thresholds. The illustration summarizes the selected control paths and experiment workflow.
 
 ## Hardware on the bench
 
