@@ -59,4 +59,4 @@ The selected source uses independent lookup tables and piecewise linear interpol
 | [`firmware/`](firmware/README.md) | Selected original source/configuration files with a SHA-256 manifest |
 | `assets/` | Annotated overview, calibration chart and original build photos |
 
-The firmware directory contains selected source evidence. See its [scope and verification notes](firmware/README.md) and [source provenance](THIRD_PARTY_NOTICES.md).
+The firmware directory contains selected source evidence. See its [scope and verification notes](firmware/README.md). Original source copyright and component license notices are retained in the firmware snapshot.
